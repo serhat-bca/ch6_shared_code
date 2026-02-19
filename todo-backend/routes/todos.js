@@ -14,6 +14,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const todo = await Todo.findByPk(req.params.id);
+    if (!todo) res.status(404).json({ message: "Task not found" });
     res.json(todo);
   } catch (error) {
     res.status(400).json({ error: error.message });
