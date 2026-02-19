@@ -5,12 +5,14 @@ const todoSequelize = require("./util/db");
 const port = process.env.PORT || 3001;
 const { reqLogger } = require("./util/middleware");
 const todosRouter = require("./routes/todos");
+const usersRouter = require("./routes/users");
 require("./models"); // make sure to require it
 
 // middleware
 app.use(express.json());
 app.use(reqLogger);
 app.use("/api/todos", todosRouter);
+app.use("/api/users", usersRouter);
 
 const start = async () => {
   try {
