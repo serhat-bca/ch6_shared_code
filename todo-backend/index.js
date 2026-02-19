@@ -5,6 +5,7 @@ const todoSequelize = require("./util/db");
 const port = process.env.PORT || 3001;
 const { reqLogger } = require("./util/middleware");
 const todosRouter = require("./routes/todos");
+require("./models"); // make sure to require it
 
 // middleware
 app.use(express.json());
