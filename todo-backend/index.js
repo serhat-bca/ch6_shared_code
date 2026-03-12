@@ -6,13 +6,17 @@ const port = process.env.PORT || 3001;
 const { reqLogger } = require("./util/middleware");
 const todosRouter = require("./routes/todos");
 const usersRouter = require("./routes/users");
+const authRouter = require("./routes/auth");
+const cookieParser = require("cookie-parser");
 require("./models"); // make sure to require it
 
 // middleware
 app.use(express.json());
 app.use(reqLogger);
+app.use(cookieParser());
 app.use("/api/todos", todosRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/auth", authRouter);
 
 const start = async () => {
   try {
