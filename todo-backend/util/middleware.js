@@ -19,7 +19,7 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ error: "Unauthorized: Token missing" });
   try {
     const user = jwt.verify(token, process.env.SECRET);
-    req.user;
+    req.user = user;
     next();
   } catch (error) {
     return res
