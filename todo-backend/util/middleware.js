@@ -16,15 +16,15 @@ const reqLogger = (req, res, next) => {
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token)
-    return res.status(401).json({ error: "unauthorized: Token missing" });
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
   try {
     const user = jwt.verify(token, process.env.SECRET);
-    req.user = user;
+    req.user;
     next();
   } catch (error) {
     return res
       .status(401)
-      .json({ error: "unauthorized: Token invalid or expired" });
+      .json({ error: "Unauthorized: Token invalid or expired" });
   }
 };
 

@@ -12,8 +12,8 @@ require("./models"); // make sure to require it
 
 // middleware
 app.use(express.json());
-app.use(reqLogger);
 app.use(cookieParser());
+app.use(reqLogger);
 app.use("/api/todos", todosRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);

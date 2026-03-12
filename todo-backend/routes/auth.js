@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
-
 const { authenticateToken } = require("../util/middleware");
 
 const { User } = require("../models");
@@ -9,26 +8,28 @@ const { User } = require("../models");
 router.post("/", async (req, res) => {
   try {
     const { username, password } = req.body;
+
+    // user check
     const user = await User.findOne({ where: { username } });
-
     if (!user) return res.status(401).json({ message: "Invalid Credentials" });
-
+    // password check
     const passCheck = await bcrypt.compare(password, user.password);
-
     if (!passCheck)
       return res.status(401).json({ message: "Invalid Credentials" });
 
+    // token payload which will be the user object
     const tokenPayload = { username: user.username, id: user.id };
-
+    // sign the token with the secret key using jwt
     const token = jwt.sign(tokenPayload, process.env.SECRET, {
       expiresIn: "1h",
     });
 
+    // send the cookie with the token
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000, // 1 hour
     });
 
     res.json({
@@ -42,8 +43,9 @@ router.post("/", async (req, res) => {
   }
 });
 
+// protected route demonstration
 router.get("/protected", authenticateToken, (req, res) => {
-  res.status(200).json({ message: "Authorized", user: req.user });
+  res.json({ message: "authorized", user: req.user });
 });
 
 module.exports = router;
