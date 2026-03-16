@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Todo, User } = require("../models");
+const { authenticateToken } = require("../util/middleware");
 
 router.get("/", async (req, res) => {
   try {
@@ -31,9 +32,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authenticateToken, async (req, res) => {
   try {
-    const { task, done, userId } = req.body;
+    const { task, done } = req.body;
+    const userId = req.user.id;
+    console.log(userId);
     // const { task, done } = req.body; // this requires express.json() middleware
     const todo = await Todo.create({ task, done, userId });
     res.status(201).json(todo);
@@ -42,14 +45,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticateToken, async (req, res) => {
   try {
-    const { userId } = req.body;
     // check if todo exist
     const todo = await Todo.findByPk(req.params.id);
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     // check if the owner correct
-    if (todo.userId !== userId)
+    if (todo.userId !== req.user.id)
       return res.status(403).json({ message: "Unauthorized" });
     await todo.destroy();
     res.status(204).end();
