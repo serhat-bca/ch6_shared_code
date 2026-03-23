@@ -19,6 +19,20 @@ const App = () => {
     fetchTodos();
   }, []);
 
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const user = await authAPI.fetchLoggedUser();
+        setLoggedUser(user);
+      } catch (error) {
+        console.log(error);
+        setLoggedUser(null);
+      }
+    };
+
+    checkUser();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -31,10 +45,15 @@ const App = () => {
     setPassword("");
   };
 
+  const handleLogout = async ()=>{
+    
+  }
+
   return (
     <div>
       {loggedUser ? (
-        <p>Howdy, {loggedUser.name}</p>
+        <p>Howdy, {loggedUser.name}</p> 
+        <button onClick={handleLogout}>Logout</button>
       ) : (
         <Login
           handleSubmit={handleSubmit}

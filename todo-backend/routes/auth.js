@@ -48,6 +48,10 @@ router.get("/protected", authenticateToken, (req, res) => {
   res.json({ message: "authorized", user: req.user });
 });
 
+router.get("/me", authenticateToken, (req, res) => {
+  res.json(req.user);
+});
+
 // logout to clear the cookies
 router.post("/logout", (req, res) => {
   res.clearCookie("token", { httpOnly: true, sameSite: "strict" });

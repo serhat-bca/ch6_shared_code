@@ -7,4 +7,14 @@ const login = async (userCredentials) => {
   return response.data;
 };
 
-export default { login };
+const fetchLoggedUser = async () => {
+  const response = await axios.get(`${AUTH_API}/me`, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+const logout =
+
+export default { login, fetchLoggedUser };
